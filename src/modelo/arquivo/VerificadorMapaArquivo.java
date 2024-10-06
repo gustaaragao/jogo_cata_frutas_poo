@@ -128,18 +128,13 @@ public class VerificadorMapaArquivo {
     }
 
     public boolean setFrutasDiversas(int frutasDiversas) {
-        if (espacoDisponivel < 1 && frutasDiversas > this.frutasDiversas)
-            return false;
-        else if (frutasDiversas < 0)
-            return false;
-        else {
-            if (frutasDiversas < this.frutasDiversas)
-                espacoDisponivel++;
-            else
-                espacoDisponivel--;
-            this.frutasDiversas = frutasDiversas;
-            return true;
-        }
+        int deltaFrutas = frutasDiversas - this.frutasDiversas;
+
+        // valor invalido, ou quero adicionar mais do que posso.
+        if (frutasDiversas < 0 || espacoDisponivel - deltaFrutas < 0) return false;
+
+        this.frutasDiversas+= deltaFrutas;
+        return true;
     }
 
     public int getChanceBichada() {
