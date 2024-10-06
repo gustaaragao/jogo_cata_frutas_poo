@@ -62,6 +62,8 @@ public class VerificadorMapaArquivo {
                 arvAmora + arvAcerola + arvGoiaba + arvCoco + frutasOuroChao + frutasDiversas);
     }
 
+
+
     public int getDimensao() {
         return dimensao;
     }
@@ -143,7 +145,6 @@ public class VerificadorMapaArquivo {
 
     public boolean setChanceBichada(int chanceBichada) {
         if (chanceBichada < 0 || chanceBichada > 100) return false;
-
         this.chanceBichada = chanceBichada;
         return true;
     }
@@ -160,8 +161,8 @@ public class VerificadorMapaArquivo {
     }
 
     public boolean verificarTamanhoMinimo(int frutasOuroTotais, int tamanhoMochila) {
-        int aux = frutasOuroTotais/2 + 1;
-        if (tamanhoMochila < aux) {
+        int tamanhoMinimo = frutasOuroTotais/2 + 1;
+        if (tamanhoMochila < tamanhoMinimo) {
             this.tamanhoMochila = (frutasOuroTotais/2)+1;
             return true;
         }
@@ -173,126 +174,91 @@ public class VerificadorMapaArquivo {
     }
 
     public boolean setTamanhoMochila(int tamanhoMochila) {
-        if (tamanhoMochila < (frutasOuroTotais/2 + 1)) {
-            return false;
-        }
+        if (tamanhoMochila < (frutasOuroTotais/2 + 1)) return false;
         this.tamanhoMochila = tamanhoMochila;
         return true;
     }
 
+
+    public int getCoco() {
+        return coco;
+    }
+    public int getLaranja() {
+        return laranja;
+    }
+    public int getAbacate() {
+        return abacate;
+    }
+    public int getAmora() {
+        return amora;
+    }
+    public int getAcerola() {
+        return acerola;
+    }
+    public int getGoiaba() {
+        return goiaba;
+    }
+    public int getArvAmora() {
+        return arvAmora;
+    }
+    public int getArvGoiaba() {
+        return arvGoiaba;
+    }
+    public int getArvAcerola() {
+        return arvAcerola;
+    }
     public int getArvCoco() {
         return arvCoco;
     }
-
-    public boolean setArvCoco(int arvCoco) {
-        if (espacoDisponivel < 1 && arvCoco > this.arvCoco)
-            return false;
-        else if (arvCoco < 0)
-            return false;
-        else {
-            if (arvCoco < this.arvCoco)
-                espacoDisponivel++;
-            else
-                espacoDisponivel--;
-            this.arvCoco = arvCoco;
-            return true;
-        }
-    }
-
     public int getArvLaranja() {
         return arvLaranja;
     }
-
-    public boolean setArvLaranja(int arvLaranja) {
-        if (espacoDisponivel < 1 && arvLaranja > this.arvLaranja)
-            return false;
-        else if (arvLaranja < 0)
-            return false;
-        else {
-            if (arvLaranja < this.arvLaranja)
-                espacoDisponivel++;
-            else
-                espacoDisponivel--;
-            this.arvLaranja = arvLaranja;
-            return true;
-        }
-    }
-
     public int getArvAbacate() {
         return arvAbacate;
     }
 
-    public boolean setArvAbacate(int arvAbacate) {
-        if (espacoDisponivel < 1 && arvAbacate > this.arvAbacate)
-            return false;
-        else if (arvAbacate < 0)
-            return false;
-        else {
-            if (arvAbacate < this.arvAbacate)
-                espacoDisponivel++;
-            else
-                espacoDisponivel--;
-            this.arvAbacate = arvAbacate;
-            return true;
-        }
+    public boolean setArvCoco(int arvCoco) {
+        int deltaArvore = arvCoco - this.arvCoco;
+        if (arvCoco < 0 || espacoDisponivel + deltaArvore == 0) return false;
+        this.arvCoco += deltaArvore;
+        return true;
     }
 
-    public int getArvAmora() {
-        return arvAmora;
+    public boolean setArvLaranja(int arvLaranja) {
+        int deltaArvore = arvLaranja - this.arvLaranja;
+        if (arvLaranja < 0 || espacoDisponivel + deltaArvore == 0) return false;
+        this.arvCoco += deltaArvore;
+        return true;
+    }
+
+    public boolean setArvAbacate(int arvAbacate) {
+        int deltaArvore = arvAbacate - this.arvAbacate;
+        if (arvAbacate < 0 || espacoDisponivel + deltaArvore == 0) return false;
+        this.arvAbacate += deltaArvore;
+        return true;
     }
 
     public boolean setArvAmora(int arvAmora) {
-        if (espacoDisponivel < 1 && arvAmora > this.arvAmora)
-            return false;
-        else if (arvAmora < 0)
-            return false;
-        else {
-            if (arvAmora < this.arvAmora)
-                espacoDisponivel++;
-            else
-                espacoDisponivel--;
-            this.arvAmora = arvAmora;
-            return true;
-        }
-    }
-
-    public int getArvAcerola() {
-        return arvAcerola;
+        int deltaArvore = arvAmora - this.arvAmora;
+        if (arvAmora < 0 || espacoDisponivel + deltaArvore == 0) return false;
+        this.arvAmora += deltaArvore;
+        return true;
     }
 
     public boolean setArvAcerola(int arvAcerola) {
-        if (espacoDisponivel < 1 && arvAcerola > this.arvAcerola)
-            return false;
-        else if (arvAcerola < 0)
-            return false;
-        else {
-            if (arvAcerola < this.arvAcerola)
-                espacoDisponivel++;
-            else
-                espacoDisponivel--;
-            this.arvAcerola = arvAcerola;
-            return true;
-        }
-    }
-
-    public int getArvGoiaba() {
-        return arvGoiaba;
+        int deltaArvore = arvAcerola - this.arvAcerola;
+        if (arvAcerola < 0 || espacoDisponivel + deltaArvore == 0) return false;
+        this.arvAcerola += deltaArvore;
+        return true;
     }
 
     public boolean setArvGoiaba(int arvGoiaba) {
-        if (espacoDisponivel < 1 && arvGoiaba > this.arvGoiaba)
-            return false;
-        else if (arvGoiaba < 0)
-            return false;
-        else {
-            if (arvGoiaba < this.arvGoiaba)
-                espacoDisponivel++;
-            else
-                espacoDisponivel--;
-            this.arvGoiaba = arvGoiaba;
-            return true;
-        }
+        int deltaArvore = arvGoiaba - this.arvGoiaba;
+        if (arvGoiaba < 0 || espacoDisponivel + deltaArvore == 0) return false;
+        this.arvGoiaba += deltaArvore;
+        return true;
     }
+
 
     public int getEspacoDisponivel() {
         return espacoDisponivel;
@@ -302,29 +268,6 @@ public class VerificadorMapaArquivo {
         this.espacoDisponivel = espacoDisponivel;
     }
 
-    public int getCoco() {
-        return coco;
-    }
-
-    public int getLaranja() {
-        return laranja;
-    }
-
-    public int getAbacate() {
-        return abacate;
-    }
-
-    public int getAmora() {
-        return amora;
-    }
-
-    public int getAcerola() {
-        return acerola;
-    }
-
-    public int getGoiaba() {
-        return goiaba;
-    }
 
     public void distribuirFrutas() {
         for (int i = 0; i < frutasDiversas; i++) {
@@ -352,4 +295,5 @@ public class VerificadorMapaArquivo {
             }
         }
     }
+
 }
