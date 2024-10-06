@@ -142,12 +142,10 @@ public class VerificadorMapaArquivo {
     }
 
     public boolean setChanceBichada(int chanceBichada) {
-        if (chanceBichada < 0 || chanceBichada > 100)
-            return false;
-        else {
-            this.chanceBichada = chanceBichada;
-            return true;
-        }
+        if (chanceBichada < 0 || chanceBichada > 100) return false;
+        
+        this.chanceBichada = chanceBichada;
+        return true;
     }
 
     public int getPedras() {
