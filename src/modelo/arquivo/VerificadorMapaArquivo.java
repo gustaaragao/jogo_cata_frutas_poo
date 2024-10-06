@@ -143,7 +143,7 @@ public class VerificadorMapaArquivo {
 
     public boolean setChanceBichada(int chanceBichada) {
         if (chanceBichada < 0 || chanceBichada > 100) return false;
-        
+
         this.chanceBichada = chanceBichada;
         return true;
     }
@@ -153,18 +153,10 @@ public class VerificadorMapaArquivo {
     }
 
     public boolean setPedras(int pedras) {
-        if (espacoDisponivel < 1 && pedras > this.pedras)
-            return false;
-        else if (pedras < 0)
-            return false;
-        else {
-            if (pedras < this.pedras)
-                espacoDisponivel++;
-            else
-                espacoDisponivel--;
-            this.pedras = pedras;
-            return true;
-        }
+        int deltaPedra = pedras - this.pedras;
+        if (pedras < 0 || espacoDisponivel + deltaPedra < 0) return false;
+        this.pedras += deltaPedra;
+        return true;
     }
 
     public boolean verificarTamanhoMinimo(int frutasOuroTotais, int tamanhoMochila) {
