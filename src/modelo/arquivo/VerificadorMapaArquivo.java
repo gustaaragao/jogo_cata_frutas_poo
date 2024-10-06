@@ -1,8 +1,7 @@
 package modelo.arquivo;
 
-import modelo.tipos.QuantidadeFrutas;
-
 import java.util.Random;
+
 
 public class VerificadorMapaArquivo {
 
@@ -68,22 +67,15 @@ public class VerificadorMapaArquivo {
     }
 
     public boolean setDimensao(int dimensao) {
-        if (dimensao < 5 || dimensao > 12)
-            return false;
-        else if (dimensao < this.dimensao && espacoDisponivel < (this.dimensao*this.dimensao - dimensao*dimensao)) {
-            return false;
-        }
-        else {
-            int aux = dimensao*dimensao;
-            if (dimensao < this.dimensao) {
-                espacoDisponivel = espacoDisponivel - (this.dimensao*this.dimensao - dimensao*dimensao);
-            }
-            else {
-                espacoDisponivel = espacoDisponivel + (2*dimensao - 1);
-            }
-            this.dimensao = dimensao;
-            return true;
-        }
+
+        int deltaEspaco = dimensao^2 - this.dimensao^2;
+        boolean foraDosLimites = dimensao < 5 || dimensao > 12;
+
+        if (foraDosLimites || deltaEspaco - espacoDisponivel < 0) return false;
+
+        espacoDisponivel = espacoDisponivel + deltaEspaco;
+        this.dimensao = dimensao;
+        return true;
     }
 
     public int getFrutasOuroChao() {
