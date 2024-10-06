@@ -85,14 +85,14 @@ public class VerificadorMapaArquivo {
 
     public boolean setFrutasOuroChao(int frutasOuroChao) {
         int deltaFrutasOuro = frutasOuroChao - this.frutasOuroChao;
-
+        int novoTotal = frutasOuroChao + frutasOuroTotais;
         //valores invalidos.
         if (frutasOuroChao<0) return false;
-        if (frutasOuroChao == 0 && frutasOuroTotais == 0) return false;
+        if (novoTotal == 0) return false;
 
         //quero adicionar mais do que posso.
         if ((espacoDisponivel + deltaFrutasOuro) <= 0) return false;
-        
+
         this.frutasOuroChao+=deltaFrutasOuro;
         return true;
     }
@@ -102,18 +102,14 @@ public class VerificadorMapaArquivo {
     }
 
     public boolean setFrutasOuroASurgir(int frutasOuroASurgir) {
-        if (frutasOuroASurgir < 0)
-            return false;
-        else if (frutasOuroASurgir == 0 && frutasOuroTotais == 0)
-            return false;
-        else {
-            if (frutasOuroASurgir < this.frutasOuroASurgir)
-                frutasOuroTotais--;
-            else
-                frutasOuroTotais++;
-            this.frutasOuroASurgir = frutasOuroASurgir;
-            return true;
-        }
+        int deltaFrutasOuro = frutasOuroASurgir - this.frutasOuroASurgir;
+        int novoTotal = frutasOuroChao + frutasOuroTotais;
+
+        if (frutasOuroASurgir < 0) return false;
+        if (novoTotal == 0) return false;
+
+        this.frutasOuroASurgir+= deltaFrutasOuro;
+        return true;
     }
 
     public int getFrutasOuroTotais() {
