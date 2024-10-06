@@ -78,29 +78,23 @@ public class VerificadorMapaArquivo {
         return true;
     }
 
+
     public int getFrutasOuroChao() {
         return frutasOuroChao;
     }
 
     public boolean setFrutasOuroChao(int frutasOuroChao) {
-        if (espacoDisponivel < 1 && frutasOuroChao > this.frutasOuroChao)
-            return false;
-        else if(frutasOuroChao < 0)
-            return false;
-        else if (frutasOuroChao == 0 && frutasOuroTotais == 0)
-            return false;
-        else {
-            if (frutasOuroChao < this.frutasOuroChao) {
-                espacoDisponivel++;
-                frutasOuroTotais--;
-            }
-            else {
-                espacoDisponivel--;
-                frutasOuroTotais++;
-            }
-            this.frutasOuroChao = frutasOuroChao;
-            return true;
-        }
+        int deltaFrutasOuro = frutasOuroChao - this.frutasOuroChao;
+
+        //valores invalidos.
+        if (frutasOuroChao<0) return false;
+        if (frutasOuroChao == 0 && frutasOuroTotais == 0) return false;
+
+        //quero adicionar mais do que posso.
+        if ((espacoDisponivel + deltaFrutasOuro) <= 0) return false;
+        
+        this.frutasOuroChao+=deltaFrutasOuro;
+        return true;
     }
 
     public int getFrutasOuroASurgir() {
