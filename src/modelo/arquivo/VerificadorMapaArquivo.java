@@ -137,6 +137,7 @@ public class VerificadorMapaArquivo {
         // valor invalido, ou quero adicionar mais do que posso.
         if (frutasDiversas < 0 || espacoDisponivel - deltaFrutas < 0) return false;
 
+        espacoDisponivel += deltaFrutas;
         this.frutasDiversas+= deltaFrutas;
         return true;
     }
