@@ -70,10 +70,10 @@ public class VerificadorMapaArquivo {
 
     public boolean setDimensao(int dimensao) {
 
-        int deltaEspaco = dimensao^2 - this.dimensao^2;
+        int deltaEspaco = dimensao*dimensao - this.dimensao*this.dimensao;
         boolean foraDosLimites = dimensao < 5 || dimensao > 12;
 
-        if (foraDosLimites || deltaEspaco - espacoDisponivel < 0) return false;
+        if (foraDosLimites || (espacoDisponivel + deltaEspaco) <0 ) return false;
 
         espacoDisponivel = espacoDisponivel + deltaEspaco;
         this.dimensao = dimensao;
@@ -87,14 +87,15 @@ public class VerificadorMapaArquivo {
 
     public boolean setFrutasOuroChao(int frutasOuroChao) {
         int deltaFrutasOuro = frutasOuroChao - this.frutasOuroChao;
-        int novoTotal = frutasOuroChao + frutasOuroTotais;
+        int novoTotal = deltaFrutasOuro + frutasOuroTotais;
         //valores invalidos.
         if (frutasOuroChao<0) return false;
         if (novoTotal == 0) return false;
 
         //quero adicionar mais do que posso.
-        if ((espacoDisponivel + deltaFrutasOuro) <= 0) return false;
+        if ((espacoDisponivel + deltaFrutasOuro) < 0) return false;
 
+        espacoDisponivel = espacoDisponivel + deltaFrutasOuro;
         this.frutasOuroChao+=deltaFrutasOuro;
         return true;
     }
@@ -105,11 +106,12 @@ public class VerificadorMapaArquivo {
 
     public boolean setFrutasOuroASurgir(int frutasOuroASurgir) {
         int deltaFrutasOuro = frutasOuroASurgir - this.frutasOuroASurgir;
-        int novoTotal = frutasOuroChao + frutasOuroTotais;
+        int novoTotal = deltaFrutasOuro + frutasOuroTotais;
 
         if (frutasOuroASurgir < 0) return false;
         if (novoTotal == 0) return false;
 
+        espacoDisponivel += deltaFrutasOuro;
         this.frutasOuroASurgir+= deltaFrutasOuro;
         return true;
     }
@@ -156,6 +158,7 @@ public class VerificadorMapaArquivo {
     public boolean setPedras(int pedras) {
         int deltaPedra = pedras - this.pedras;
         if (pedras < 0 || espacoDisponivel + deltaPedra < 0) return false;
+        espacoDisponivel += deltaPedra;
         this.pedras += deltaPedra;
         return true;
     }
@@ -221,6 +224,7 @@ public class VerificadorMapaArquivo {
         int deltaArvore = arvCoco - this.arvCoco;
         if (arvCoco < 0 || espacoDisponivel + deltaArvore == 0) return false;
         this.arvCoco += deltaArvore;
+        espacoDisponivel += deltaArvore;
         return true;
     }
 
@@ -228,6 +232,7 @@ public class VerificadorMapaArquivo {
         int deltaArvore = arvLaranja - this.arvLaranja;
         if (arvLaranja < 0 || espacoDisponivel + deltaArvore == 0) return false;
         this.arvCoco += deltaArvore;
+        espacoDisponivel += deltaArvore;
         return true;
     }
 
@@ -235,6 +240,7 @@ public class VerificadorMapaArquivo {
         int deltaArvore = arvAbacate - this.arvAbacate;
         if (arvAbacate < 0 || espacoDisponivel + deltaArvore == 0) return false;
         this.arvAbacate += deltaArvore;
+        espacoDisponivel += deltaArvore;
         return true;
     }
 
@@ -242,6 +248,7 @@ public class VerificadorMapaArquivo {
         int deltaArvore = arvAmora - this.arvAmora;
         if (arvAmora < 0 || espacoDisponivel + deltaArvore == 0) return false;
         this.arvAmora += deltaArvore;
+        espacoDisponivel += deltaArvore;
         return true;
     }
 
@@ -249,6 +256,7 @@ public class VerificadorMapaArquivo {
         int deltaArvore = arvAcerola - this.arvAcerola;
         if (arvAcerola < 0 || espacoDisponivel + deltaArvore == 0) return false;
         this.arvAcerola += deltaArvore;
+        espacoDisponivel += deltaArvore;
         return true;
     }
 
@@ -256,6 +264,7 @@ public class VerificadorMapaArquivo {
         int deltaArvore = arvGoiaba - this.arvGoiaba;
         if (arvGoiaba < 0 || espacoDisponivel + deltaArvore == 0) return false;
         this.arvGoiaba += deltaArvore;
+        espacoDisponivel += deltaArvore;
         return true;
     }
 
