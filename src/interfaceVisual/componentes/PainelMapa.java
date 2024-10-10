@@ -12,7 +12,7 @@ public class PainelMapa extends JPanel {
 
     public PainelMapa() {
         setLayout(null);
-        setBackground(Color.LIGHT_GRAY);  // Cor de fundo para visualizar a área reservada
+        setBackground(Color.decode("#ffc9c9"));  // Cor de fundo para visualizar a área reservada
         setBounds(0, 0, 624, 624);
     }
 
