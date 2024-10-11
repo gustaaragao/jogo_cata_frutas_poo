@@ -4,9 +4,22 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
+/**
+ * A classe Imagem contém utilitários para manipulação e combinação de imagens.
+ */
 public class Imagem {
 
-    // Função que combina duas imagens
+    /**
+     * Combina duas imagens, desenhando a imagem sobreposta no centro da imagem base.
+     * 
+     * <p>Este método recebe duas imagens do tipo {@link ImageIcon}, sendo que a imagem sobreposta
+     * será desenhada sobre a imagem base. A imagem final será retornada como um {@link BufferedImage}.</p>
+     *
+     * @param imagemBase       A imagem de fundo sobre a qual a segunda imagem será desenhada.
+     * @param imagemSobreposta A imagem que será desenhada no centro da imagem base.
+     * @return Um {@link BufferedImage} contendo a imagem base com a imagem sobreposta desenhada no centro.
+     * @throws IllegalArgumentException Se uma ou ambas as imagens forem inválidas (nulas).
+     */
     public static BufferedImage combinarImagens(ImageIcon imagemBase, ImageIcon imagemSobreposta) {
         if (imagemBase.getImage() == null || imagemSobreposta.getImage() == null) {
             throw new IllegalArgumentException("Uma ou ambas as imagens são inválidas.");

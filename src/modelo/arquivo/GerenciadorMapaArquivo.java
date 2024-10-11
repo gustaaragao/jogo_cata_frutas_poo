@@ -5,10 +5,30 @@ import modelo.mapa.MapaConfiguracao;
 import java.util.Arrays;
 import java.io.*;
 
+/**
+ * A classe {@code GerenciadorMapaArquivo} fornece métodos para importar e exportar configurações
+ * de mapas de terreno de arquivos de texto. Ela permite ler as configurações de um arquivo e criar
+ * um objeto {@link MapaConfiguracao} correspondente, bem como exportar a configuração de um mapa
+ * para um arquivo de texto.
+ * <p>
+ * As funções utilizam {@link BufferedReader} e {@link BufferedWriter} para ler e escrever nos
+ * arquivos de maneira eficiente.
+ * </p>
+ */
 public class GerenciadorMapaArquivo {
 
-    // Para as funções a seguir eu usei a seguinte referência: https://www.geeksforgeeks.org/java-io-bufferedreader-class-java/
-
+    /**
+     * Importa um arquivo de texto contendo as configurações de um mapa de terreno.
+     * <p>
+     * O arquivo deve ter configurações como dimensão, quantidade de pedras, probabilidade de frutas bichadas,
+     * tamanho da mochila e a quantidade de frutas específicas. A leitura será feita linha por linha, 
+     * com cada configuração separada por espaços.
+     * </p>
+     *
+     * @param caminhoArquivo O caminho do arquivo a ser importado.
+     * @return Um {@link MapaConfiguracao} contendo as configurações lidas do arquivo, ou {@code null}
+     *         caso ocorra algum erro durante a leitura do arquivo.
+     */
     public static MapaConfiguracao importarArquivoTerreno(String caminhoArquivo) {
         BufferedReader br = null;
         MapaConfiguracao configMapa = new MapaConfiguracao();
@@ -35,9 +55,10 @@ public class GerenciadorMapaArquivo {
                     case "mochila":
                         configMapa.setTamanhoMochila(Integer.parseInt(partesLinhas[1]));
                         break;
-                    default: if (Arrays.asList(FrutasValidas).contains(partesLinhas[0].toLowerCase())) {
-                        configMapa.qntFrutasPorTipo.put(partesLinhas[0].toLowerCase(),new QuantidadeFrutas(Integer.parseInt(partesLinhas[1]), Integer.parseInt(partesLinhas[2]))); 
-                    }
+                    default: 
+                        if (Arrays.asList(FrutasValidas).contains(partesLinhas[0].toLowerCase())) {
+                            configMapa.qntFrutasPorTipo.put(partesLinhas[0].toLowerCase(), new QuantidadeFrutas(Integer.parseInt(partesLinhas[1]), Integer.parseInt(partesLinhas[2])));
+                        }
                 }
             }
 
@@ -63,6 +84,16 @@ public class GerenciadorMapaArquivo {
         return null; // Retorna null caso haja erro na leitura do arquivo
     }
 
+    /**
+     * Exporta as configurações de um {@link MapaConfiguracao} para um arquivo de texto.
+     * <p>
+     * As configurações do mapa serão convertidas em texto e escritas no arquivo especificado.
+     * O arquivo criado poderá ser lido posteriormente utilizando o método {@link #importarArquivoTerreno(String)}.
+     * </p>
+     *
+     * @param caminhoArquivo       O caminho do arquivo para exportar as configurações.
+     * @param configuracaoDoMapa   Um objeto {@link MapaConfiguracao} que contém as configurações a serem exportadas.
+     */
     public static void exportarArquivoTerreno(String caminhoArquivo, MapaConfiguracao configuracaoDoMapa) {
         BufferedWriter bw = null;
 

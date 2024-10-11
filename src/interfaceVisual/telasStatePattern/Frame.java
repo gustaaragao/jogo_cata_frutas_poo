@@ -49,7 +49,7 @@ public class Frame{
         //tem terreno e comecou partida são falsos quando instanciados.
         frame.setVisible(true);
     }
-	
+
     public void setState(Tela novaTela){
         frame.remove(atual.getPanel());
         this.atual = novaTela;

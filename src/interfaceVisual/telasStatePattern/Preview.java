@@ -1,13 +1,13 @@
 package interfaceVisual.telasStatePattern;
 
+import interfaceVisual.componentes.PainelMapa;
 import modelo.mapa.Mapa;
 
 import javax.swing.*;
-import java.awt.*;
 
 public class Preview {
     JFrame frame;
-    Jogo jogo;
+    JPanel panel;
 
     public Preview(Mapa mapa) {
         frame = new JFrame("Preview");
@@ -17,9 +17,18 @@ public class Preview {
         frame.setLocationRelativeTo(null);
         frame.setResizable(false);
 
-        MapaPreview mapaPreview = new MapaPreview(frame, mapa);
-        
-        frame.add(mapaPreview.getPanel());
+        //MapaPreview mapaPreview = new MapaPreview(frame, mapa);
+        panel = new JPanel();
+        panel.setLayout(null);
+        panel.setBounds(0, 0, 624, 624);
+
+        PainelMapa painelMapa = new PainelMapa();
+        painelMapa.setMapa(mapa);
+        painelMapa.atualizarMapa();
+
+        panel.add(painelMapa);
+
+        frame.add(panel);
         frame.setVisible(true);
     }
 }
