@@ -6,16 +6,49 @@ import modelo.utils.*;
 import java.util.ArrayList;
 import java.util.Map;
 
-
+/**
+ * A classe mapa é a classe que representa o mapa do jogo, precisa de uma configuração para ser inicializada.
+ *
+ * @see modelo.mapa.MapaConfiguracao
+ */
 public class Mapa {
 
+    /**
+     * Dimensão do mapa.
+     */
     private final int dimensao;
+
+    /**
+     * Matriz que representa a floresta do jogo. 
+     */
     private final CelulaTerreno[][] floresta;
+  
+    /**
+     * Array que guarda referencias para as árvores da floresta, na ordem em que foram inseridas.
+     */
     private final ArrayList<Arvore> arvoresFloresta = new ArrayList<>();
+
+    /**
+     * Array que guarda a referencia pros jogadores.
+     */
     private final ArrayList<Jogador> jogadores = new ArrayList<>();
+
+    /**
+     * Instância de MapaTools que recebe a própria floresta do mapa e oferece métodos úteis.
+     *
+     * @see modelo.utils.MapaTools
+     */
     private MapaTools mapaTools;
 
 
+
+    /**
+     * O construtor de um mapa recebe a configuração importada de um arquivo e o número de jogadores.
+     *
+     * @see modelo.arquivo.GerenciadorMapaArquivo.java
+     * @see modelo.arquivo.VerificadorMapaArquivo.java
+     * @see modelo.mapa.MapaConfiguracao.java
+     */
     public Mapa(MapaConfiguracao configuracaoDoMapa, int numeroJogadores) {
         this.dimensao = configuracaoDoMapa.dimensao;
         floresta = new CelulaTerreno[dimensao][dimensao];
@@ -43,6 +76,9 @@ public class Mapa {
 
     // Posicionar Elementos ------------------------------------
 
+    /**
+     * Esse método posiciona gramas em todas as instâncias de célula terreno da floresta do mapa.
+     */
     private void posicionarGramas() {
         for (CelulaTerreno[] line : floresta) {
             for (int i = 0; i < line.length; i++) {
@@ -51,6 +87,11 @@ public class Mapa {
         }
     }
 
+    /**
+     * Esse método posiciona as pedras na floresta de maneira aleatória.
+     *
+     * @see modelo.utils.MapaTools.java
+     */
     private void posicionarPedras(int qtdPedras) {
         for (int i = 0; i < qtdPedras; i++) {
             Coordenada c = mapaTools.gerarCoordenadaValida();
@@ -58,6 +99,11 @@ public class Mapa {
         }
     }
 
+    /**
+     * Esse método posicona as árvores na floresta.
+     *
+     * @see modelo.utils.MapaTools.java
+     */
     private void posicionarArvores(Map<String, QuantidadeFrutas> FrutaMap) {
         int qtdArvore = quantidadeTotalArvores(FrutaMap);
         for (int i = 0; i < qtdArvore; i++) {
@@ -67,6 +113,11 @@ public class Mapa {
         }
     }
 
+    /**
+     * Esse método posicona as frutas no chão da floresta.
+     *
+     * @see modelo.utils.MapaTools.java
+     */
     private void posicionarFrutas(Map<String, QuantidadeFrutas> FrutaMap, int probabilidadeBichada) {
 
         for (Map.Entry<String, QuantidadeFrutas> entry : FrutaMap.entrySet()) {
@@ -80,6 +131,11 @@ public class Mapa {
         }
     }
 
+    /**
+     * Esse método posicona os jogadores. 
+     *
+     * @see modelo.utils.MapaTools.java
+     */
     private void posicionarJogador(Jogador jogador) {
         // valores para posicionar o jogador
         Coordenada c = mapaTools.gerarCoordenadaValidaJogador();

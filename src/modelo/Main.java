@@ -1,11 +1,12 @@
 package modelo;
 
 import interfaceVisual.telasStatePattern.Frame;
-<<<<<<< HEAD
+
 import interfaceVisual.telasStatePattern.Jogo;
 import modelo.arquivo.GerenciadorMapaArquivo;
 import modelo.mapa.*;
 import modelo.utils.Randomizador;
+
 /**
  * Essa classe é atualmente o ponto de partida do programa.
  * Sua única função é iniciar a interface gráfica com o jogador.
