@@ -6,7 +6,7 @@ import java.util.*;
 *
 * Fontes:
 * - https://adrianb.io/2014/08/09/perlinnoise.html
-*
+* 
 * */
 public class PerlinNoise {
 	private double seed;

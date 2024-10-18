@@ -8,7 +8,10 @@ import java.awt.image.BufferedImage;
 
 public class GeradorRuidoFlores {
     private final double[][] ruidoMatriz;
-
+    
+    private final int LARGURA_FLOR = 10;
+    private final int ALTURA_FLOR = 10;
+    
     public GeradorRuidoFlores(int dimensao) {
         this.ruidoMatriz = gerarMatriz(dimensao, 50);
     }
@@ -18,14 +21,22 @@ public class GeradorRuidoFlores {
 
         PerlinNoise perlinNoise = new PerlinNoise();
 
-        double[][] ruidoMatriz = new double[tamanhoMapa][tamanhoMapa];
+        double[][] ruidoMatriz = new double[tamanhoMapa][tamanhoMapa]; 
 
-        for (int i = 0; i < tamanhoMapa; i++) {
-            for (int j = 0; j < tamanhoMapa; j++) {
+        for (int i = 0; i < tamanhoMapa; i += LARGURA_FLOR) {
+            for (int j = 0; j < tamanhoMapa; j += ALTURA_FLOR) {
                 double ruido = perlinNoise.noise(i, j); // [-1, 1]
-
-                ruidoMatriz[i][j] = ruido;
+                
+                double ruidoAjustado = (ruido + 1) / 2;
+                
+                if (ruidoAjustado > 0.5)
+                	System.out.print("F ");
+                else
+                	System.out.print(". ");
+                
+                ruidoMatriz[i][j] = ruidoAjustado;
             }
+            System.out.println();
         }
 
         return ruidoMatriz;
@@ -33,21 +44,15 @@ public class GeradorRuidoFlores {
 
     public void posicionarFloresBloco(BtnCelulaTerreno btnCelulaTerreno) {
         if (btnCelulaTerreno.getCelulaTerreno() instanceof Grama grama) {
-            int larguraFlor = 16, alturaFlor = 13;
-
-            int posicaoX = btnCelulaTerreno.getPosicaoX();
-            int posicaoY = btnCelulaTerreno.getPosicaoY();
-
-            for (int florX = 0; florX < 50; florX += larguraFlor) {
-                for (int florY = 0; florY < 50; florY += alturaFlor) {
-
-                    double ruidoFlor = ruidoMatriz[posicaoX + florX][posicaoY + florY];
-
-                    if ((ruidoFlor >= -1 && ruidoFlor <= -0.33) || (ruidoFlor > 0.33 && ruidoFlor <= 1))
-                        if (florX + larguraFlor <= 50 && florY + alturaFlor <= 50)
-                            btnCelulaTerreno.posicionarFlor(florX, florY, Randomizador.sortearFlor());
-                }
-            }
+        	for (int florX = 0; florX < this.ruidoMatriz.length; florX++) {
+        		for (int florY = 0; florY < this.ruidoMatriz[0].length; florY++) {
+        			double ruidoFlor = ruidoMatriz[florX][florY];
+        			
+        			if (ruidoFlor >= 0.5) {
+        				
+        			}
+        		}
+        	}
 
             if (grama.getFrutaOcupante() != null) {
                 // Caso haja uma fruta naquela célula -> Combinar o sprite da fruta com o da grama.
