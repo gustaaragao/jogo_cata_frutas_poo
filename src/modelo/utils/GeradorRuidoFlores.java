@@ -21,15 +21,15 @@ public class GeradorRuidoFlores {
 
         PerlinNoise perlinNoise = new PerlinNoise();
 
-        double[][] ruidoMatriz = new double[tamanhoMapa][tamanhoMapa]; 
+        double[][] ruidoMatriz = new double[tamanhoMapa / LARGURA_FLOR][tamanhoMapa / ALTURA_FLOR];
 
-        for (int i = 0; i < tamanhoMapa; i += LARGURA_FLOR) {
-            for (int j = 0; j < tamanhoMapa; j += ALTURA_FLOR) {
+        for (int i = 0; i < ruidoMatriz.length; i++) {
+            for (int j = 0; j < ruidoMatriz[0].length; j++) {
                 double ruido = perlinNoise.noise(i, j); // [-1, 1]
                 
                 double ruidoAjustado = (ruido + 1) / 2;
                 
-                if (ruidoAjustado > 0.5)
+                if (ruidoAjustado > 0.5) // REVER ISSO AQUI
                 	System.out.print("F ");
                 else
                 	System.out.print(". ");
@@ -44,12 +44,18 @@ public class GeradorRuidoFlores {
 
     public void posicionarFloresBloco(BtnCelulaTerreno btnCelulaTerreno) {
         if (btnCelulaTerreno.getCelulaTerreno() instanceof Grama grama) {
-        	for (int florX = 0; florX < this.ruidoMatriz.length; florX++) {
-        		for (int florY = 0; florY < this.ruidoMatriz[0].length; florY++) {
+        	int posicaoX = btnCelulaTerreno.getPosicaoX() * 10;
+        	int posicaoY = btnCelulaTerreno.getPosicaoY() * 10;
+        	for (int florX = posicaoX; florX < this.ruidoMatriz.length; florX++) {
+        		for (int florY = posicaoY; florY < this.ruidoMatriz[0].length; florY++) {
         			double ruidoFlor = ruidoMatriz[florX][florY];
         			
-        			if (ruidoFlor >= 0.5) {
-        				
+        			if (ruidoFlor > 0.5) {
+        				btnCelulaTerreno.posicionarFlor(
+        						(florX % 5), 
+        						(florY % 5), 
+        						"ciano"
+        				);
         			}
         		}
         	}
