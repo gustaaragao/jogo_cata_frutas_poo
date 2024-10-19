@@ -6,53 +6,60 @@ import modelo.entidades.Grama;
 import javax.swing.*;
 import java.awt.image.BufferedImage;
 
-public class GeradorRuidoFlores {
-    private final double[][] ruidoMatriz;
+public class GeradorFlores {
+    private final int[][] matrizFlores;
+    
+    private final int[][] matrizFloresRotularizada;
     
     private final double LIMIAR_FLORES = 0.6;
     
-    private final boolean DEBUG_COORDENADAS = false;
-    private final boolean DEBUG_MAPA = true;
+    private final boolean DEBUG = true;
     
-    public GeradorRuidoFlores(int dimensao) {
-        this.ruidoMatriz = gerarMatriz(dimensao, 50);
+    public GeradorFlores(int dimensao) {
+        this.matrizFlores = gerarMatrizFlores(dimensao, 50);
+        
+        this.matrizFloresRotularizada = Grafos.rotularizarComponentesConexosVizinhanca4(matrizFlores);
+        
+        if (DEBUG) {
+        	for (int i = 0; i < matrizFloresRotularizada.length; i++) {
+        		for (int j = 0; j < matrizFloresRotularizada[0].length; j++) {
+        			System.out.printf("%d ", matrizFloresRotularizada[i][j]);
+        		}        	
+        		System.out.println();
+        	}        	
+        }
     }
     
-    private boolean isRuidoValido(double ruido) {
-    	return ruido > LIMIAR_FLORES;
-    }
-    
-    private double[][] gerarMatriz(int dimensao, int tamanhoBloco) {
+    private int[][] gerarMatrizFlores(int dimensao, int tamanhoBloco) {
         int tamanhoMapa = dimensao * tamanhoBloco;
 
         PerlinNoise perlinNoise = new PerlinNoise();
 
-        double[][] ruidoMatriz = new double[tamanhoMapa / 10][tamanhoMapa / 10];
+        int[][] matrizFlores = new int[tamanhoMapa / 10][tamanhoMapa / 10];
 
-        for (int i = 0; i < ruidoMatriz.length; i++) {
-            for (int j = 0; j < ruidoMatriz[0].length; j++) {
+        for (int i = 0; i < matrizFlores.length; i++) {
+            for (int j = 0; j < matrizFlores[0].length; j++) {
                 double ruido = perlinNoise.noise(i, j); // [-1, 1]
                 
                 double ruidoAjustado = (ruido + 1) / 2; // [0, 1]
                 
-                if (DEBUG_MAPA) {
-                	if (isRuidoValido(ruidoAjustado))
-                		System.out.print("F ");
-                	else
-                		System.out.print(". ");                	
-                }
+                if (ruidoAjustado > LIMIAR_FLORES)
+                	matrizFlores[i][j] = 1;
+                else
+                	matrizFlores[i][j] = 0;
                 
-                ruidoMatriz[i][j] = ruidoAjustado;
+                if (DEBUG) {
+                	System.out.printf("%s ", matrizFlores[i][j] == 1 ? "F" : ".");
+                }
             }
-            if (DEBUG_MAPA)
+            if (DEBUG)
             	System.out.println();
         }
 
-        return ruidoMatriz;
+        return matrizFlores;
     }
     
     
-    // TODO: MELHORAR A LEGIBILIDADE E DOCUMENTAR ISSO AQUI
     public void posicionarFloresBloco(BtnCelulaTerreno btnCelulaTerreno) {
         if (btnCelulaTerreno.getCelulaTerreno() instanceof Grama grama) {
             // Pegue a posição X e Y do bloco de 50x50 no grid (é o indíce na matriz de blocos (0, 0), (0, 1), ...)
@@ -64,15 +71,10 @@ public class GeradorRuidoFlores {
             int posicaoY = indiceBlocoY * 5;
 
             // Iterar sobre as subcélulas do bloco
-            for (int subX = 0; subX < 5; subX++) {
-                for (int subY = 0; subY < 5; subY++) {
-                    double ruidoFlor = ruidoMatriz[posicaoY + subY][posicaoX + subX];
-                    
-                    if (DEBUG_COORDENADAS)
-                    	System.out.printf("Bloco (%d, %d) Subcélula (%d, %d)\n", indiceBlocoX, indiceBlocoY, subX, subY);
-
-                    if (isRuidoValido(ruidoFlor)) {
-                        btnCelulaTerreno.posicionarFlor(subX * 10, subY * 10, "ciano");
+            for (int i = 0; i < 5; i++) {
+                for (int j = 0; j < 5; j++) {
+                    if (this.matrizFlores[posicaoY + j][posicaoX + i] == 1) {
+                        btnCelulaTerreno.posicionarFlor(j * 10, i * 10, "ciano");
                     }
                 }
             }

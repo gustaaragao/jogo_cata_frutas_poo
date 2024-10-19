@@ -5,7 +5,7 @@ import modelo.arquivo.GerenciadorMapaArquivo;
 import modelo.entidades.CelulaTerreno;
 import modelo.mapa.Mapa;
 import modelo.mapa.MapaConfiguracao;
-import modelo.utils.GeradorRuidoFlores;
+import modelo.utils.GeradorFlores;
 import modelo.utils.Randomizador;
 
 import javax.swing.*;
@@ -22,7 +22,7 @@ public class TestePerlin {
 
 		int dimensao = mapa.getDimensao(); // Varia entre 5 a 12
 
-		GeradorRuidoFlores geradorRuidoFlores = new GeradorRuidoFlores(dimensao);
+		GeradorFlores geradorFlores = new GeradorFlores(dimensao);
 
 		String pacoteTextura = Randomizador.sortearPacoteTextura();
 
@@ -43,7 +43,7 @@ public class TestePerlin {
 						floresta[i][j], pacoteTextura, posicaoX, posicaoY
 				);
 
-				geradorRuidoFlores.posicionarFloresBloco(btnCelulaTerreno);
+				geradorFlores.posicionarFloresBloco(btnCelulaTerreno);
 
 				frame.add(btnCelulaTerreno);
 
