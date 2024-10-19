@@ -68,7 +68,10 @@ public abstract class Randomizador {
     	List<String> flores = new ArrayList<>();
     	
     	flores.add("azul_marinho");
+    	flores.add("branco");
     	flores.add("ciano");
+    	flores.add("laranja");
+    	flores.add("rosa");
     	flores.add("vermelho");
     	
     	if (!flores.isEmpty()) {
