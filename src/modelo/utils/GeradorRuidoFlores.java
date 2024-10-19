@@ -9,8 +9,9 @@ import java.awt.image.BufferedImage;
 public class GeradorRuidoFlores {
     private final double[][] ruidoMatriz;
     
-    private final int LARGURA_FLOR = 10;
-    private final int ALTURA_FLOR = 10;
+    private final double LIMIAR_FLORES = 0.5;
+    
+    private final boolean DEBUG = true;
     
     public GeradorRuidoFlores(int dimensao) {
         this.ruidoMatriz = gerarMatriz(dimensao, 50);
@@ -21,7 +22,7 @@ public class GeradorRuidoFlores {
 
         PerlinNoise perlinNoise = new PerlinNoise();
 
-        double[][] ruidoMatriz = new double[tamanhoMapa / LARGURA_FLOR][tamanhoMapa / ALTURA_FLOR];
+        double[][] ruidoMatriz = new double[tamanhoMapa / 10][tamanhoMapa / 10];
 
         for (int i = 0; i < ruidoMatriz.length; i++) {
             for (int j = 0; j < ruidoMatriz[0].length; j++) {
@@ -29,10 +30,12 @@ public class GeradorRuidoFlores {
                 
                 double ruidoAjustado = (ruido + 1) / 2;
                 
-                if (ruidoAjustado > 0.5) // REVER ISSO AQUI
-                	System.out.print("F ");
-                else
-                	System.out.print(". ");
+                if (DEBUG) {
+                	if (ruidoAjustado > LIMIAR_FLORES) // REVER ISSO AQUI
+                		System.out.print("F ");
+                	else
+                		System.out.print(". ");                	
+                }
                 
                 ruidoMatriz[i][j] = ruidoAjustado;
             }
@@ -44,34 +47,38 @@ public class GeradorRuidoFlores {
 
     public void posicionarFloresBloco(BtnCelulaTerreno btnCelulaTerreno) {
         if (btnCelulaTerreno.getCelulaTerreno() instanceof Grama grama) {
-        	int posicaoX = btnCelulaTerreno.getPosicaoX() * 10;
-        	int posicaoY = btnCelulaTerreno.getPosicaoY() * 10;
-        	for (int florX = posicaoX; florX < this.ruidoMatriz.length; florX++) {
-        		for (int florY = posicaoY; florY < this.ruidoMatriz[0].length; florY++) {
-        			double ruidoFlor = ruidoMatriz[florX][florY];
-        			
-        			if (ruidoFlor > 0.5) {
-        				btnCelulaTerreno.posicionarFlor(
-        						(florX % 5), 
-        						(florY % 5), 
-        						"ciano"
-        				);
-        			}
-        		}
-        	}
+            // Pegue a posição X e Y do bloco de 50x50 no grid
+            int indiceBlocoX = btnCelulaTerreno.getPosicaoX() / 50;
+            int indiceBlocoY = btnCelulaTerreno.getPosicaoY() / 50;
+            
+            // Transforme para a posição da célula menor de 10x10
+            int posicaoX = indiceBlocoX * 5;
+            int posicaoY = indiceBlocoY * 5;
 
+            // Iterar sobre as subcélulas do bloco
+            for (int subX = 0; subX < 5; subX++) {
+                for (int subY = 0; subY < 5; subY++) {
+                    // Calcular a posição dentro da matriz de ruído
+                    double ruidoFlor = ruidoMatriz[posicaoX + subX][posicaoY + subY];
+                    
+                    if (DEBUG)
+                    	System.out.printf("Bloco (%d, %d) Subcélula (%d, %d)\n", indiceBlocoX, indiceBlocoY, subX, subY);
+
+                    if (ruidoFlor > LIMIAR_FLORES) {
+                        btnCelulaTerreno.posicionarFlor(subX * 10, subY * 10, "ciano");
+                    }
+                }
+            }
+
+            // Verifique se há uma fruta ocupante e combine com a grama
             if (grama.getFrutaOcupante() != null) {
-                // Caso haja uma fruta naquela célula -> Combinar o sprite da fruta com o da grama.
                 String nomeFruta = grama.getFrutaOcupante().getClass().getSimpleName().toLowerCase();
-
                 String caminhoFruta = "/interfaceVisual/imagens/frutas/" + nomeFruta + ".png";
 
                 ImageIcon iconFruta = new ImageIcon(this.getClass().getResource(caminhoFruta));
-
                 ImageIcon iconGrama = btnCelulaTerreno.getCelulaIcon();
 
                 BufferedImage imagemCombinada = Imagem.combinarImagens(iconGrama, iconFruta);
-
                 btnCelulaTerreno.setCelulaIcon(new ImageIcon(imagemCombinada));
             }
         }
