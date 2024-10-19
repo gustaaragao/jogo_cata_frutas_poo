@@ -9,14 +9,19 @@ import java.awt.image.BufferedImage;
 public class GeradorRuidoFlores {
     private final double[][] ruidoMatriz;
     
-    private final double LIMIAR_FLORES = 0.5;
+    private final double LIMIAR_FLORES = 0.6;
     
-    private final boolean DEBUG = true;
+    private final boolean DEBUG_COORDENADAS = false;
+    private final boolean DEBUG_MAPA = true;
     
     public GeradorRuidoFlores(int dimensao) {
         this.ruidoMatriz = gerarMatriz(dimensao, 50);
     }
-
+    
+    private boolean isRuidoValido(double ruido) {
+    	return ruido > LIMIAR_FLORES;
+    }
+    
     private double[][] gerarMatriz(int dimensao, int tamanhoBloco) {
         int tamanhoMapa = dimensao * tamanhoBloco;
 
@@ -28,10 +33,10 @@ public class GeradorRuidoFlores {
             for (int j = 0; j < ruidoMatriz[0].length; j++) {
                 double ruido = perlinNoise.noise(i, j); // [-1, 1]
                 
-                double ruidoAjustado = (ruido + 1) / 2;
+                double ruidoAjustado = (ruido + 1) / 2; // [0, 1]
                 
-                if (DEBUG) {
-                	if (ruidoAjustado > LIMIAR_FLORES) // REVER ISSO AQUI
+                if (DEBUG_MAPA) {
+                	if (isRuidoValido(ruidoAjustado))
                 		System.out.print("F ");
                 	else
                 		System.out.print(". ");                	
@@ -39,15 +44,18 @@ public class GeradorRuidoFlores {
                 
                 ruidoMatriz[i][j] = ruidoAjustado;
             }
-            System.out.println();
+            if (DEBUG_MAPA)
+            	System.out.println();
         }
 
         return ruidoMatriz;
     }
-
+    
+    
+    // TODO: MELHORAR A LEGIBILIDADE E DOCUMENTAR ISSO AQUI
     public void posicionarFloresBloco(BtnCelulaTerreno btnCelulaTerreno) {
         if (btnCelulaTerreno.getCelulaTerreno() instanceof Grama grama) {
-            // Pegue a posição X e Y do bloco de 50x50 no grid
+            // Pegue a posição X e Y do bloco de 50x50 no grid (é o indíce na matriz de blocos (0, 0), (0, 1), ...)
             int indiceBlocoX = btnCelulaTerreno.getPosicaoX() / 50;
             int indiceBlocoY = btnCelulaTerreno.getPosicaoY() / 50;
             
@@ -58,13 +66,12 @@ public class GeradorRuidoFlores {
             // Iterar sobre as subcélulas do bloco
             for (int subX = 0; subX < 5; subX++) {
                 for (int subY = 0; subY < 5; subY++) {
-                    // Calcular a posição dentro da matriz de ruído
-                    double ruidoFlor = ruidoMatriz[posicaoX + subX][posicaoY + subY];
+                    double ruidoFlor = ruidoMatriz[posicaoY + subY][posicaoX + subX];
                     
-                    if (DEBUG)
+                    if (DEBUG_COORDENADAS)
                     	System.out.printf("Bloco (%d, %d) Subcélula (%d, %d)\n", indiceBlocoX, indiceBlocoY, subX, subY);
 
-                    if (ruidoFlor > LIMIAR_FLORES) {
+                    if (isRuidoValido(ruidoFlor)) {
                         btnCelulaTerreno.posicionarFlor(subX * 10, subY * 10, "ciano");
                     }
                 }

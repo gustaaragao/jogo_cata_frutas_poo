@@ -1,4 +1,4 @@
-dimensao 6
+dimensao 12
 pedras 0
 maracuja 0 0
 laranja 0 0

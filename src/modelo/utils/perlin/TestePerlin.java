@@ -30,14 +30,14 @@ public class TestePerlin {
 
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		frame.setResizable(false);
-		frame.setSize(1024,1024);
+		frame.setSize(800,800);
 		frame.setLayout(null);
 		frame.setVisible(true);
 
 		for (int i = 0; i < dimensao; i++) {
 			for (int j = 0; j < dimensao; j++) {
-				int posicaoX = j * 50;
-				int posicaoY = i * 50;
+				int posicaoX = i * 50;
+				int posicaoY = j * 50;
 
 				BtnCelulaTerreno btnCelulaTerreno = new BtnCelulaTerreno(
 						floresta[i][j], pacoteTextura, posicaoX, posicaoY
