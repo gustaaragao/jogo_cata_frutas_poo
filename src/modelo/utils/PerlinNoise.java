@@ -6,7 +6,7 @@ import java.util.*;
 *
 * Fontes:
 * - https://adrianb.io/2014/08/09/perlinnoise.html
-*
+* 
 * */
 public class PerlinNoise {
 	private double seed;
@@ -21,6 +21,9 @@ public class PerlinNoise {
 
 	public PerlinNoise() {
 		this.seed = new Random().nextGaussian() * 255;
+		
+		System.out.println(seed);
+		
 		init();
 	}
 
