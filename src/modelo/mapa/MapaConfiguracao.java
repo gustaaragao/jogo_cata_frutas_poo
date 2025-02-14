@@ -37,6 +37,8 @@ public class MapaConfiguracao {
      * Tamanho da mochila máximo do jogador.
      */
     protected int tamanhoMochila;
+    private int frutasOuroTotais;
+    public int frutasOuroChão;
 
     public MapaConfiguracao() {}
 
@@ -45,6 +47,8 @@ public class MapaConfiguracao {
         this.qtdPedras = verificador.getPedras();
         this.probabilidadeBichadas = verificador.getChanceBichada();
         this.tamanhoMochila = verificador.getTamanhoMochila();
+        frutasOuroTotais = verificador.getFrutasOuroTotais();
+        frutasOuroChão = verificador.getFrutasOuroChao();
 
         String[] FrutasValidas = {"maracuja", "laranja", "abacate", "coco", "acerola", "amora", "goiaba" };
 
@@ -70,6 +74,11 @@ public class MapaConfiguracao {
 
     public void setTamanhoMochila(int tamanhoMochila) {
         this.tamanhoMochila = tamanhoMochila;
+    }
+
+    public int getProbabilidadeBichadas(){return this.probabilidadeBichadas;}
+    public int getFrutasOuroTotais() {
+        return frutasOuroTotais;
     }
 
     

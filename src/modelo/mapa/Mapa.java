@@ -1,10 +1,15 @@
 package modelo.mapa;
 
+import modelo.MovimentoJogador.GrafoJogador;
+import modelo.MovimentoJogador.RelacaoPeso;
 import modelo.entidades.*;
+import modelo.frutas.Maracuja;
 import modelo.tipos.*;
 import modelo.utils.*;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.PriorityQueue;
+import java.util.Stack;
 
 /**
  * Essa classe configura e contém a floresta na qual o jogo ocorre.
@@ -16,14 +21,18 @@ public class Mapa {
     private final ArrayList<Arvore> arvoresFloresta = new ArrayList<>();
     private final ArrayList<Jogador> jogadores = new ArrayList<>();
     public MapaTools mapaTools;
+    public int quantidadeFrutasOuro;
+    public MapaConfiguracao configuracao;
 
     public Mapa(MapaConfiguracao configuracaoDoMapa, int numeroJogadores) {
         this.dimensao = configuracaoDoMapa.dimensao;
+        quantidadeFrutasOuro = configuracaoDoMapa.getFrutasOuroTotais();
         floresta = new CelulaTerreno[dimensao][dimensao];
         this.mapaTools = new MapaTools(floresta, dimensao);
         for (int i = 0; i < numeroJogadores; i++)
-            this.jogadores.add(new Jogador("J" + (i+1), Coordenada.origem()));
+            this.jogadores.add(new Jogador("J" + (i+1), Coordenada.origem(), configuracaoDoMapa.tamanhoMochila));
         carregarTerreno(configuracaoDoMapa);
+        configuracao = configuracaoDoMapa;
     }
 
 
@@ -98,6 +107,7 @@ public class Mapa {
                 Coordenada coordenadaValida = mapaTools.gerarCoordenadaValidaFruta();
                 Grama grama = (Grama) mapaTools.celulaEm(coordenadaValida);
                 grama.setFrutaOcupante(fruta);
+                //fruta.setNome(entry.getKey());
             }
         }
     }
@@ -110,6 +120,7 @@ public class Mapa {
         Coordenada c = mapaTools.gerarCoordenadaValidaJogador();
         jogador.setCoordenada(c);
         floresta[c.getI()][c.getJ()].setJogadorOcupante(jogador);
+        jogador.setCelulaOcupada(floresta[c.getI()][c.getJ()]);
     }
 
     /**
@@ -170,6 +181,32 @@ public class Mapa {
 
     }
 
+    public void moverJogador(Jogador jogador, int i, int j) {
+        GrafoJogador grafo = new GrafoJogador(this);
+        grafo.preencherMatriz(this, jogador.getCoordenada());
+        Stack<Coordenada> passos = grafo.passosAtePosicao(new Coordenada(i, j));
+
+        if (floresta[i][j].getJogadorOcupante() == null){
+            Coordenada coordenada = jogador.getCoordenada();
+            floresta[coordenada.getI()][coordenada.getJ()].setJogadorOcupante(null);
+            jogador.setCoordenada(new Coordenada(i, j));
+            jogador.setCelulaOcupada(floresta[i][j]);
+            floresta[i][j].setJogadorOcupante(jogador);
+        }
+        else {
+            while (passos.size() > 2) passos.pop();
+            Coordenada novaCoordenada = passos.pop();
+            Coordenada coordenada = jogador.getCoordenada();
+            floresta[coordenada.getI()][coordenada.getJ()].setJogadorOcupante(null);
+            jogador.setCoordenada(novaCoordenada);
+            jogador.setCelulaOcupada(floresta[novaCoordenada.getI()][novaCoordenada.getJ()]);
+            floresta[novaCoordenada.getI()][novaCoordenada.getJ()].setJogadorOcupante(jogador);
+            Jogador jogadorDefensor = floresta[i][j].getJogadorOcupante();
+            encrenca(jogador, jogadorDefensor);
+        }
+
+    }
+
     /**
      * vizualiza o terreno atual no terminal.
      */
@@ -183,5 +220,39 @@ public class Mapa {
     @Override
     public String toString(){
         return mapaTools.FlorestaToString();
+    }
+
+
+
+    public ArrayList<CelulaTerreno> getGramasLivres(){
+        ArrayList<CelulaTerreno> celulasLivres = new ArrayList<>();
+        for (CelulaTerreno[] linha : this.floresta){
+            for (CelulaTerreno celula : linha){
+                if (celula instanceof Grama){
+                    if(((Grama) celula).frutaOcupante == null) celulasLivres.add(celula);
+                }
+            }
+        }
+        return celulasLivres;
+    }
+
+    public void encrenca(Jogador jogadorAtacante, Jogador jogadorDefensor){
+
+        ArrayList<CelulaTerreno> gramasLivres = getGramasLivres();
+        if (gramasLivres == null) return;
+        ArrayList<Fruta> frutasDerrubadas = JogadorUtils.frutasDerrubadas(jogadorAtacante, jogadorDefensor, gramasLivres.size());
+        if (frutasDerrubadas == null) return;
+        for (Fruta fruta : frutasDerrubadas){
+            posicinarFruta(fruta);
+        }
+    }
+
+    public void posicinarFruta(Fruta fruta){
+        Coordenada c = mapaTools.gerarCoordenadaValidaFruta();
+        ((Grama) mapaTools.celulaEm(c)).frutaOcupante = fruta;
+    }
+
+    public int getQuantidadeFrutasOuro() {
+        return quantidadeFrutasOuro;
     }
 }

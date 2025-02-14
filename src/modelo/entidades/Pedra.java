@@ -1,9 +1,10 @@
 package modelo.entidades;
 
 import modelo.utils.Imagem;
+import modelo.utils.Randomizador;
 
 import javax.swing.*;
-import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public class Pedra extends CelulaTerreno {
 
@@ -11,6 +12,10 @@ public class Pedra extends CelulaTerreno {
         super();
     }
 
+
+    /**
+     * Gera o elemento para exibição no terminal.
+     */
     /**
      * Responsável por gerar o modelo para exibição no terminal
      */
@@ -21,15 +26,18 @@ public class Pedra extends CelulaTerreno {
             return getJogadorOcupante().toString() + "/#";
         } else return "#";
     }
-
     /**
      * Gera a imagem para vizualização.
      */
     @Override
-    public Image toImage() {
+    public ImageIcon toImageIcon(String pacoteTextura) {
+        String caminhoGrama = "/interfaceVisual/imagens/blocos/" + pacoteTextura + "/grama.png";
         String caminhoPedra = "/interfaceVisual/imagens/pedras/pedra.png";
 
+        ImageIcon iconGrama = new ImageIcon(this.getClass().getResource(caminhoGrama));
         ImageIcon iconPedra = new ImageIcon(this.getClass().getResource(caminhoPedra));
+
+        BufferedImage imagemCombinada = Imagem.combinarImagens(iconGrama, iconPedra);
 
         if (this.getJogadorOcupante() != null) {
             String caminhoJogador;
@@ -40,11 +48,13 @@ public class Pedra extends CelulaTerreno {
 
             ImageIcon iconJogador = new ImageIcon(this.getClass().getResource(caminhoJogador));
 
-            ImageIcon iconCombinado = new ImageIcon(Imagem.combinarImagens(iconPedra, iconJogador));
+            ImageIcon combinacaoAnterior =  new ImageIcon(imagemCombinada);
 
-            return iconCombinado.getImage();
+            imagemCombinada = Imagem.combinarImagens(combinacaoAnterior, iconJogador);
+
+            return new ImageIcon(imagemCombinada);
         }
 
-        return iconPedra.getImage();
+        return new ImageIcon(imagemCombinada);
     }
 }

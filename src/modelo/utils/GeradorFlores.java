@@ -1,19 +1,23 @@
 package modelo.utils;
 
-import javax.swing.*;
-import java.awt.*;
+import interfaceVisual.componentes.BtnCelulaTerreno;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class GeradorFlores {
 
     private final int[][] matrizFloresRotularizada;
+
     private final Map<Integer, String> rotuloParaFlor;
+
     private final boolean DEBUG = false;
 
     public GeradorFlores(int dimensao) {
         int[][] matrizFlores = gerarMatrizFlores(dimensao);
+
         matrizFloresRotularizada = Grafos.rotularizarComponentesConexosVizinhanca4(matrizFlores);
+
         this.rotuloParaFlor = new HashMap<>();
 
         if (DEBUG) {
@@ -28,15 +32,24 @@ public class GeradorFlores {
 
     private int[][] gerarMatrizFlores(int dimensao) {
         int tamanhoMapa = dimensao * 50;
+
         PerlinNoise perlinNoise = new PerlinNoise();
+
         int[][] matrizFlores = new int[tamanhoMapa / 10][tamanhoMapa / 10];
 
         for (int i = 0; i < matrizFlores.length; i++) {
             for (int j = 0; j < matrizFlores[0].length; j++) {
                 double ruido = perlinNoise.noise(i, j); // [-1, 1]
+
                 double LIMIAR_FLORES = 0.4;
-                matrizFlores[i][j] = (ruido <= -LIMIAR_FLORES || ruido >= LIMIAR_FLORES) ? 1 : 0;
-                if (DEBUG) System.out.printf("%s ", matrizFlores[i][j] == 1 ? "F" : ".");
+                if (ruido <= -LIMIAR_FLORES | ruido >= LIMIAR_FLORES)
+                    matrizFlores[i][j] = 1;
+                else
+                    matrizFlores[i][j] = 0;
+
+                if (DEBUG) {
+                    System.out.printf("%s ", matrizFlores[i][j] == 1 ? "F" : ".");
+                }
             }
             if (DEBUG) System.out.println();
         }
@@ -44,23 +57,33 @@ public class GeradorFlores {
         return matrizFlores;
     }
 
-    public void posicionarFlor(JPanel painel, int x, int y, int inicioX, int inicioY, Graphics g) {
-        int rotulo = this.matrizFloresRotularizada[x][y];
-        if (rotulo != 0) {
-            if (!rotuloParaFlor.containsKey(rotulo)) {
-                String florAleatoria = Randomizador.sortearFlor();
-                rotuloParaFlor.put(rotulo, florAleatoria);
-                if (DEBUG) System.out.printf("%d -> %s\n", rotulo, florAleatoria);
-            }
 
-            String corFlor = rotuloParaFlor.get(rotulo);
-            String caminhoFlor = "/interfaceVisual/imagens/flores/flor_" + corFlor + ".png";
-            Image imagemFlor = new ImageIcon(this.getClass().getResource(caminhoFlor)).getImage();
+    public void posicionarFloresBloco(BtnCelulaTerreno btnCelulaTerreno, int xBloco, int yBloco) {
+            // Transforme para a posição da célula menor de 10x10
+            int posicaoX = xBloco * 5;
+            int posicaoY = yBloco * 5;
 
-            if (imagemFlor != null) {
-                // Agora desenha diretamente usando o `Graphics` fornecido
-                g.drawImage(imagemFlor,inicioY + (y * 10), inicioX + (x * 10), 10, 10, painel);
+            // Iterar sobre as subcélulas do bloco
+            for (int i = 0; i < 5; i++) {
+                for (int j = 0; j < 5; j++) {
+                    // Pegar o rótulo da célula
+                    int rotulo = this.matrizFloresRotularizada[posicaoY + j][posicaoX + i];
+
+                    // Se o rótulo não for 0 (ou seja, existe uma flor para essa célula)
+                    if (rotulo != 0) {
+                        // Verificar se já existe uma flor associada a esse rótulo
+                        if (!rotuloParaFlor.containsKey(rotulo)) {
+                            // Gerar uma flor aleatória para esse rótulo usando o RandomizadorFlor
+                            String florAleatoria = Randomizador.sortearFlor();
+                            rotuloParaFlor.put(rotulo, florAleatoria);
+                            if (DEBUG) System.out.printf("%d -> %s\n", rotulo, florAleatoria);
+                        }
+
+                        // Posicionar a flor da cor associada ao rótulo
+                        String corFlor = rotuloParaFlor.get(rotulo);
+                        btnCelulaTerreno.posicionarFlor(j * 10, i * 10, corFlor);
+                    }
+                }
             }
-        }
     }
 }

@@ -1,9 +1,13 @@
 package modelo.utils;
 
-import modelo.entidades.Arvore;
-import modelo.entidades.CelulaTerreno;
-import modelo.entidades.Grama;
+import modelo.MovimentoJogador.RelacaoPeso;
+import modelo.entidades.*;
+import modelo.mapa.Mapa;
 import modelo.tipos.Coordenada;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.PriorityQueue;
 import java.util.Random;
 
 /**
@@ -215,6 +219,8 @@ public class MapaTools {
             return builder.toString();
     }
     // ------------------------------------------------------------
+
+
 }
 
 

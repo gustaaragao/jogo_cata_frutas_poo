@@ -26,30 +26,31 @@ public class Start extends Tela {
         botaoStart.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                frame.getReprodutorDeSom().tocarBotao();
                 frame.setState(frame.getMenu());
             }
         });
 
-//        ImageIcon botaoConfigBackground = new ImageIcon(this.getClass().getResource("/interfaceVisual/imagens/botoes/soundOn.png"));
-//        JButton botaoConfig = new JButton(botaoConfigBackground);
-//        botaoConfig.setBounds(920, 450, 57,57);
-//        botaoConfig.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                frame.getReprodutorDeSom().tocarBotao();
-//                if (frame.getReprodutorDeSom().getIsAtivo()) {
-//                    frame.getReprodutorDeSom().pausarSom();
-//                    frame.getReprodutorDeSom().setIsAtivo(false);
-//                    botaoConfig.setIcon(new ImageIcon(this.getClass().getResource("/interfaceVisual/imagens/botoes/soundOff.png")));
-//                } else {
-//                    frame.getReprodutorDeSom().tocarSom();
-//                    frame.getReprodutorDeSom().setIsAtivo(true);
-//                    botaoConfig.setIcon(botaoConfigBackground);
-//                }
-//            }
-//        });
+        ImageIcon botaoConfigBackground = new ImageIcon(this.getClass().getResource("/interfaceVisual/imagens/botoes/soundOn.png"));
+        JButton botaoConfig = new JButton(botaoConfigBackground);
+        botaoConfig.setBounds(920, 450, 57,57);
+        botaoConfig.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.getReprodutorDeSom().tocarBotao();
+                if (frame.getReprodutorDeSom().getIsAtivo()) {
+                    frame.getReprodutorDeSom().pausarMusica();
+                    frame.getReprodutorDeSom().setIsAtivo(false);
+                    botaoConfig.setIcon(new ImageIcon(this.getClass().getResource("/interfaceVisual/imagens/botoes/soundOff.png")));
+                } else {
+                    frame.getReprodutorDeSom().reproduzirMusica();
+                    frame.getReprodutorDeSom().setIsAtivo(true);
+                    botaoConfig.setIcon(botaoConfigBackground);
+                }
+            }
+        });
 
-//        panel.add(botaoConfig);
+        panel.add(botaoConfig);
         panel.add(botaoStart);
         panel.add(background);
     }

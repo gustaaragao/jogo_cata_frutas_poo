@@ -1,6 +1,6 @@
 package interfaceVisual.telas;
 
-import interfaceVisual.paineis.PainelMapa;
+import interfaceVisual.componentes.PainelMapa;
 import modelo.mapa.Mapa;
 
 import javax.swing.*;
@@ -13,6 +13,7 @@ import java.awt.*;
  */
 public class Preview {
     private JFrame frame;
+    private JPanel panel;
     private PainelMapa painelMapa;
 
     /** Construtor recebe uma instância de {@link Mapa} e configura o {@link JFrame} da classe.
@@ -20,9 +21,6 @@ public class Preview {
      * @param mapa Um mapa do jogo.
      */
     public Preview(Mapa mapa) {
-        frame = new JFrame("Preview");
-
-        int dimensao = mapa.getDimensao();
 
         // Verificar o sistema operacional
         String os = System.getProperty("os.name").toLowerCase();
@@ -32,20 +30,30 @@ public class Preview {
         if (os.contains("win")) {
             // TODO: Rapha veja qual o valor exato de margem que precisamos usar aqui.
             margemX = 16;
-            margemY = 32; // Ajuste a margem conforme necessário
+            margemY = 35; // Ajuste a margem conforme necessário
         }
 
+        frame = new JFrame("Preview");
         frame.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/interfaceVisual/imagens/icones/previewIcon.png")));
-        frame.setSize((dimensao * 50) + margemX, (dimensao * 50) + margemY);
+        frame.setSize(mapa.getDimensao() * 50 + margemX, mapa.getDimensao() * 50 + margemY);
         frame.setLayout(null);
         frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         frame.setLocationRelativeTo(null);
         frame.setResizable(false);
 
-        PainelMapa painelMapa = new PainelMapa(mapa);
+        panel = new JPanel();
+        panel.setLayout(null);
+        panel.setBounds(0, 0, mapa.getDimensao() * 50, mapa.getDimensao() * 50);
 
-        frame.add(painelMapa);
+        painelMapa = new PainelMapa(mapa);
 
+        panel.add(painelMapa);
+
+        frame.add(panel);
         frame.setVisible(true);
+    }
+
+    public PainelMapa getPainelMapa() {
+        return painelMapa;
     }
  }

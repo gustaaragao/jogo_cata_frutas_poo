@@ -26,6 +26,7 @@ public class Menu extends Tela{
         botaoVoltar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                frame.getReprodutorDeSom().tocarBotao();
                 frame.setState(frame.getStart());
             }
         });
@@ -38,6 +39,7 @@ public class Menu extends Tela{
         botaoSelecionarImportar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                frame.getReprodutorDeSom().tocarBotao();
                 frame.setState(frame.getImportarTerreno());
             }
         });
@@ -48,6 +50,7 @@ public class Menu extends Tela{
         botaoSelecionarConfigurar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                frame.getReprodutorDeSom().tocarBotao();
                 frame.setState(frame.getConfigurarTerreno());
             }
         });

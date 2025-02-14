@@ -1,5 +1,9 @@
 package modelo.entidades;
 
+import modelo.utils.Efeitos;
+
+import java.util.ArrayList;
+
 /**
  * Essa classe implementa o comportamento abstrato das frutas do jogo.
  */
@@ -21,22 +25,37 @@ public abstract class Fruta {
     }
 
 
+    // getters & setters ------------------------------
     public void bicharFruta() {
-        bichada=true;
+    	bichada=true;
     }
-
     public boolean isBichada() {
         return bichada;
     }
     public void setBichada(boolean bichada) {
         this.bichada = bichada;
     }
+    // ------------------------------------------------
 
-    public abstract void causarEfeito(); // TODO: Precisamos criar a lógica do causarEfeito()
+
+    public ArrayList<Efeitos> causarEfeito(){
+        ArrayList<Efeitos> efeitos = new ArrayList<>();
+        if (this.bichada) efeitos.add(Efeitos.ENVENENAMENTO);
+        efeitos.add(Efeitos.NEUTRO);
+        return efeitos;
+    }
 
     @Override
     public String toString(){
         return this.nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getNome() {
+        return nome;
     }
 
 }

@@ -1,7 +1,9 @@
 package modelo.entidades;
 
+import modelo.utils.Imagem;
+
 import javax.swing.*;
-import java.awt.*;
+import java.awt.image.BufferedImage;
 
 /**
  * A classe árvore representa o elemento árvore do jogo, e contém os métodos para gerar frutas.
@@ -25,6 +27,7 @@ public class Arvore extends CelulaTerreno {
     }
 
 
+    // getters & setters -----------------------------------------------
     public int getRodadasRestantesParaGerarFruta() {
         return rodadasRestantesParaGerarFruta;
     }
@@ -36,6 +39,7 @@ public class Arvore extends CelulaTerreno {
     public void setFrutaDaArvore(Fruta fruta) {
         this.frutaDaArvore = fruta;
     }
+    // ------------------------------------------------------------------
 
 
     public void gerarFrutaArvore() {
@@ -72,12 +76,41 @@ public class Arvore extends CelulaTerreno {
      * Gera a imagem correspondente à árvore.
      */
     @Override
-    public Image toImage() {
+    public ImageIcon toImageIcon(String pacoteTextura) {
+        // Caminhos das imagens
+        String caminhoGrama = "/interfaceVisual/imagens/blocos/" + pacoteTextura + "/grama.png";
         String nomeFrutaArvore = this.frutaDaArvore.getClass().getSimpleName().toLowerCase();
         String caminhoArvore = "/interfaceVisual/imagens/arvores/arvore_" + nomeFrutaArvore + ".png";
 
-        ImageIcon iconArvore = new ImageIcon(this.getClass().getResource(caminhoArvore));
+        ImageIcon texturaGrama = new ImageIcon(this.getClass().getResource(caminhoGrama));
+        ImageIcon arvore = new ImageIcon(this.getClass().getResource(caminhoArvore));
 
-        return iconArvore.getImage();
+        BufferedImage imagemCombinada = Imagem.combinarImagens(texturaGrama, arvore);
+
+        BufferedImage imagemComJogador = combinarJogador(imagemCombinada);
+
+        if (imagemComJogador == null)
+            return new ImageIcon(imagemCombinada);
+        else
+            return new ImageIcon(imagemComJogador);
+    }
+
+    public BufferedImage combinarJogador(BufferedImage combinacaoAnterior) {
+        if (this.getJogadorOcupante() != null) {
+            String caminhoJogador;
+            if (getJogadorOcupante().getNome().equals("J1"))
+                caminhoJogador = "/interfaceVisual/imagens/jogadores/jogador1.png";
+            else
+                caminhoJogador = "/interfaceVisual/imagens/jogadores/jogador2.png";
+
+            ImageIcon iconJogador = new ImageIcon(this.getClass().getResource(caminhoJogador));
+
+            ImageIcon combinacaoAnteriorIcon =  new ImageIcon(combinacaoAnterior);
+
+            BufferedImage imagemCombinada = Imagem.combinarImagens(combinacaoAnteriorIcon, iconJogador);
+
+            return imagemCombinada;
+        }
+        return null;
     }
 }
